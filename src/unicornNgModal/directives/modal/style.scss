@@ -1,0 +1,132 @@
+@import 'src/sass/variables/_variables.scss';
+@import 'src/sass/mixins/_breakpoint.scss';
+
+@-webkit-keyframes modal-fadeout {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-fadeout {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes modal-fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: fixed;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &.modal_closing {
+    .modal_overlay {
+      -webkit-backface-visibility: hidden;
+      animation: modal-fadeout $modal-animate-duration;
+    }
+
+    .modal_content {
+      -webkit-backface-visibility: hidden;
+      animation: modal-fadeout $modal-animate-duration;
+    }
+  }
+
+  .modal_content {
+    background: transparent;
+
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+
+    -webkit-backface-visibility: hidden;
+    animation: modal-fadein $modal-animate-duration;
+
+    @include breakpoint($breakpoint-small) {
+      align-items: center;
+      padding: 24px;
+    }
+  }
+
+  .modal_overlay {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.4);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -webkit-backface-visibility: hidden;
+    animation: modal-fadein $modal-animate-duration;
+  }
+}
+
+modal {
+  position: relative;
+  display: block;
+  z-index: $z-index-modal;
+  min-height: 100%;
+  width: 100%;
+  background-color: $modal-bg-color;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+  @include breakpoint($modal-inset-mode-break-point) {
+    width: 80%;
+    min-height: 170px;
+  }
+
+  @include breakpoint($breakpoint-regular) {
+    width: 60%;
+  }
+
+  .content-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .modal-footer {
+    padding: 20px 1.5rem;
+    width: 100%;
+
+    background-color: #f9f9f9;
+
+    @include breakpoint($modal-inset-mode-break-point) {
+      border-radius: 0 0 4px 4px;
+    }
+  }
+}

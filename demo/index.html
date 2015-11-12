@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/bower_components/ramda/dist/ramda.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-moment/angular-moment.min.js"></script>
+    <script type="text/javascript" src="/dist/all.js?"></script>
+    <link rel="stylesheet" href="/dist/unicorn-ng-datepicker.css" />
+    <script>
+      var demo = angular.module('demo', ['unicornNgDatepicker', 'unicornNgModal', 'angularMoment', 'unicornNgBtn', 'unicornNgIcons', 'unicornNgDate']);
+
+      demo.controller('mainController', function($scope) {
+        $scope.datepickerModel = []
+        $scope.today = +new Date()
+        $scope.yesterday = moment().subtract(1, 'day')
+        $scope.tomorrow = moment().add(1, 'day')
+      });
+    </script>
+    <style>
+      p {
+        margin-bottom: 10px;
+      }
+      .block {
+        width: 300px;
+        margin: 20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div ng-app="demo" ng-controller="mainController">
+
+      <div class="block">
+        <p>Not disabled at all</p>
+        <datepicker ng-model="datepickerModel[0]" disable-before="0" ng-change="modal.close(model)"></datepicker>
+      </div>
+
+      <div class="block">
+        <p>Disabled after today</p>
+        <datepicker ng-model="datepickerModel[1]" disable-before="0" disable-after="today" ng-change="modal.close(model)"></datepicker>
+      </div>
+
+      <div class="block">
+        <p>Disabled before yesterday and after tomorrow</p>
+        <datepicker ng-model="datepickerModel[2]" disable-before="yesterday" disable-after="tomorrow" ng-change="modal.close(model)"></datepicker>
+      </div>
+
+    </div>
+  </body>
+</html>

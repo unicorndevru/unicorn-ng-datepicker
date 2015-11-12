@@ -1,0 +1,27 @@
+modal-close {
+  text-align: center;
+  display: block;
+  vertical-align: middle;
+  cursor: pointer;
+
+  modal & {
+    position: absolute;
+    right: 1rem;
+    top: 1.1rem;
+    z-index: 1000;
+  }
+
+  icons {
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+    transition: fill .15s ease-in-out;
+  }
+
+  &:hover {
+    icons {
+      fill: #ccc;
+    }
+  }
+}

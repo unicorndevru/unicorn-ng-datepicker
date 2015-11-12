@@ -1,0 +1,87 @@
+@import 'mixins/shadows';
+
+.bank-card-list {
+  @include mt(1);
+  @include ml(-0.5);
+  @include breakpoint($breakpoint-medium) {
+    @include ml(-1);
+  }
+
+  > li {
+    display: inline-block;
+    @include ml(0.5);
+    @include mb(1);
+    width: 80px;
+    text-align: center;
+    position: relative;
+
+    @include breakpoint($breakpoint-medium) {
+      @include ml(1);
+      width: 100px;
+      text-align: left;
+    }
+  }
+
+  .card-hint {
+    &:hover {
+      .card-hint-container {
+        display: block;
+      }
+    }
+  }
+  .card-hint-container {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 45px;
+    margin-left: -145px;
+    width: 250px;
+    padding: 1rem;
+    font-size: .8rem;
+    background-color: white;
+    @include shadow(1);
+
+    &:before {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      height: 0;
+      width: 0;
+      margin-left: -5px;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 10px;
+      border-top-color: rgba(168, 168, 168, 0.2);
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      margin-left: -5px;
+      height: 0;
+      width: 0;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 10px;
+      border-top-color: white;
+    }
+  }
+}
+
+.bank-card {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  border-radius: 4px;
+  background: transparent url('/img/sprite_bank_card.png') no-repeat;
+  background-size: 730px 32px;
+}
+
+.bank-card-visa             {background-position: -4px 0;}
+.bank-card-mastercard       {background-position: -99px 0;}
+.bank-card-american-express {background-position: -282px 0; width: 78px;}
+.bank-card-maestro          {background-position: -189px 0;}
+.bank-card-discover         {background-position: -388px 0; width: 70px;}
+.bank-card-payture          {background-position: -616px 0; width: 73px;}

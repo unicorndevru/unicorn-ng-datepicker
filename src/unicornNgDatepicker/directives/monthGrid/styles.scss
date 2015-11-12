@@ -1,0 +1,109 @@
+datepicker-month-grid {
+  display: block;
+
+  .month-row {
+    display: flex;
+    text-align: center;
+    flex-flow: row wrap;
+  }
+  .month-col {
+    max-width: calc(100%/7);
+    flex: 1;
+  }
+
+  .day-of-week {
+    min-height: 20px;
+    text-transform: uppercase;
+    font-size: 0.8em;
+  }
+
+  .day-of-month {
+    position: relative;
+    height: 50px;
+    font-size: 1.2em;
+
+    &.selected {
+      font-weight: 400;
+      background-color: #F3F8FF;
+    }
+
+    &.today {
+      .day-today:before {
+        background-color: red;
+      }
+    }
+
+    &.disabled-after {
+      .day-disabled-after {
+        background-color: #a0a0a0;
+      }
+    }
+
+    &.disabled-before {
+      .day-disabled-before {
+        background-color: #a0a0a0;
+      }
+    }
+
+    .selected-mark-container {
+      position: absolute;
+      display: none;
+      width: 100%;
+      text-align: center;
+
+      span {
+        position: relative;
+        display: block;
+        width: 6px;
+        height: 6px;
+        margin: auto;
+        border-radius: 50%;
+        background-color: red;
+      }
+    }
+  }
+  .day-text {
+    position: relative;
+    top: 0px;
+    display: inline-block;
+    margin: auto;
+  }
+  .day-today {
+    position: relative;
+    display: block;
+
+    &:before {
+      position: absolute;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      margin-left: -3px;
+
+      content: '';
+      transition: background-color .15s ease-in;
+
+      border-radius: 3px;
+      background-color: transparent;
+    }
+  }
+  .day-disabled-before {
+    display: block;
+    position: absolute;
+    right: -1px;
+    width: 1px;
+    height: 100%;
+    top: 0px;
+    transition: background-color .15s ease-in;
+    background-color: transparent;
+  }
+  .day-disabled-after {
+    display: block;
+    position: absolute;
+    left: -1px;
+    width: 1px;
+    height: 100%;
+    top: 0px;
+    transition: background-color .15s ease-in;
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,17 @@
+.month-row
+  .month-col.day-of-week(ng-repeat="weekDay in weekDays")    
+    date-format(value="weekDay" parse="E" format="dd")
+
+section    
+  .month-row(ng-repeat="week in weeks")
+    .month-col(ng-repeat="day in week")
+      button.day-of-month(        
+        btn-layout="link block"
+        ng-class="{ empty: !day.day, selected: day.isSelected, 'button-disabled': day.isDisabled, today: day.isToday, 'disabled-after': day.isDisabledAfter, 'disabled-before': day.isDisabledBefore}",
+        ng-click="day.date && selectDate(day.date)")
+        span.day-text(ng-if="day.day")
+          | {{ day.day }}
+        
+        span.day-today
+        span.day-disabled-before
+        span.day-disabled-after

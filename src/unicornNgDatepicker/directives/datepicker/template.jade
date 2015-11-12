@@ -1,0 +1,12 @@
+section
+  div.clicker(ng-click="openDatepicker()")
+  input.input(
+    type="text"
+    title='{{ hoverText }}'
+    date-input-format="LL"
+    readonly="true"
+    placeholder="Choose date"
+    ng-model="date")
+  
+  .icon
+    icons.f30p.text-primary(name="eight/time_and_date/calendar")

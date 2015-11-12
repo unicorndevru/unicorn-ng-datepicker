@@ -1,0 +1,128 @@
+$vr-font-size: 15px !global;
+$vr-line-height: 1.5 !global;
+$vr-cap-height: 0.6 !global;
+$vr-line-scale: 2 !global;
+
+$vr-grid-unit: $vr-line-height * $vr-font-size / $vr-line-scale !global; // (px)
+
+
+@function em($px: 0, $font-size: $vr-font-size) {
+  @return $px / $font-size + em;
+}
+@function rem($px: 0) {
+  @return $px / $vr-font-size + rem;
+}
+@function grid-units($q: 1) {
+  @return rem($q * $vr-grid-unit);
+}
+
+
+@mixin debug($v: 0) {
+  &:before {
+    content: unquote("'" + $v + "'");
+    background: white;
+    color: red;
+    padding: 0.25em 0.5em;
+    border-radius: 50%;
+  }
+}
+
+@mixin ph($grid-units: 1) {
+  padding-right: grid-units($grid-units);
+  padding-left: grid-units($grid-units);
+}
+@mixin pv($grid-units: 1) {
+  padding-top: grid-units($grid-units);
+  padding-bottom: grid-units($grid-units);
+}
+@mixin pt($grid-units: 1) {
+  padding-top: grid-units($grid-units);
+}
+@mixin pr($grid-units: 1) {
+  padding-right: grid-units($grid-units);
+}
+@mixin pb($grid-units: 1) {
+  padding-bottom: grid-units($grid-units);
+}
+@mixin pl($grid-units: 1) {
+  padding-left: grid-units($grid-units);
+}
+
+
+@mixin mh($grid-units: 1) {
+  margin-right: grid-units($grid-units);
+  margin-left: grid-units($grid-units);
+}
+@mixin mv($grid-units: 1) {
+  margin-top: grid-units($grid-units);
+  margin-bottom: grid-units($grid-units);
+}
+@mixin mt($grid-units: 1) {
+  margin-top: grid-units($grid-units);
+}
+@mixin mr($grid-units: 1) {
+  margin-right: grid-units($grid-units);
+}
+@mixin mb($grid-units: 1) {
+  margin-bottom: grid-units($grid-units);
+}
+@mixin ml($grid-units: 1) {
+  margin-left: grid-units($grid-units);
+}
+
+@mixin set-vr-font-size($font-size: $vr-font-size, $line-height: $vr-line-height) {
+  font-size: $font-size;
+  line-height: $line-height + rem;
+}
+
+// Display the grid as a background image
+@mixin show-baseline($color: rgb(54, 126, 237)) {
+  background-image: linear-gradient(
+                  to bottom,
+                  $color 0%,
+                  transparent 5%
+  );
+  background-size: 100% rem($vr-grid-unit);
+  background-position: left top;
+}
+
+
+// based on a gist by Razvan Onofrei: https://gist.github.com/razwan/10662500
+// See https://medium.com/@razvanonofrei/aligning-type-to-baseline-the-right-way-using-sass-e258fce47a9b
+// see also https://gist.github.com/jeromev/11301969
+
+@mixin align-to-baseline($font-size: $vr-font-size, $offset-top: 0, $offset-bottom: 0, $method: 'direction-margins', $scale: $vr-line-scale) {
+  // integer number of base units that can fit the given font-size
+  $lines: ceil($font-size / $vr-grid-unit);
+  // calculate the new line-height
+  $line-height: $vr-grid-unit * $lines;  // (px)
+  $line-height-ratio: $line-height / $vr-font-size;
+  // print the results
+  font-size: rem($font-size);
+  line-height: rem($line-height);
+  $baseline-distance: ($line-height-ratio - $vr-cap-height) / $scale * $vr-font-size;  // (px)
+  $offset-top: $offset-top * $vr-grid-unit;  // (px)
+  $offset-bottom: $offset-bottom * $vr-grid-unit;  // (px)
+
+
+  @if ($method == 'relatively') {
+    position: relative;
+    top: em($baseline-distance + $offset-top);
+    padding-bottom: em($offset-bottom);
+  }
+
+  // http://csswizardry.com/2012/06/single-direction-margin-declarations
+  @if ($method == 'direction-margins') {
+    padding-top: em($baseline-distance + $offset-top);
+    margin-bottom: em($line-height - $baseline-distance - $vr-grid-unit + $offset-bottom);
+  }
+
+  @if ($method == 'paddings-only') {
+    padding-top: em($baseline-distance + $offset-top);
+    padding-bottom: em($line-height - $baseline-distance - $vr-grid-unit + $offset-bottom);
+  }
+}
+
+.show-baseline {
+  @include show-baseline();
+}

@@ -1,0 +1,124 @@
+// Fonts
+//$base-font-size: (16/16)*100%;
+//$baseline-unitless: 24 / (16*($base-font-size/100%));
+//$baseline: $baseline-unitless * 1rem;
+
+// Breakpoints
+// $grid-responsive-sm-break:        567px !default;  // smaller than landscape phone
+// $grid-responsive-md-break:        767px !default;  // smaller than portrait tablet
+// $grid-responsive-lg-break:        1023px !default; // smaller than landscape tablet
+
+$grid-responsive-sm-break:        567px !default;  // smaller than landscape phone
+$grid-responsive-md-break:        768px !default;  // smaller than portrait tablet
+$grid-responsive-lg-break:        1024px !default; // smaller than landscape tablet
+$breakpoint-small: $grid-responsive-sm-break;
+$breakpoint-medium: $grid-responsive-md-break;
+$breakpoint-regular: $grid-responsive-lg-break;
+
+$layout-breakpoint-sm:     $grid-responsive-sm-break;
+$layout-breakpoint-md:     $grid-responsive-md-break;
+$layout-breakpoint-lg:     $grid-responsive-md-break;
+
+$baseline-grid: 16px;
+
+// Grid options
+
+$m-padin: 22px;
+$t-padinfull: 22px;
+$d-padinfull: 22px;
+
+$container-sm-max-width:  700px;
+$container-max-width:     1034px;
+
+$main-content-bottom-padding: 1.25rem;
+
+$dropdown-menu-width: (
+        tablet: 350px,
+        desktop: 310px
+);
+$dropdown-menu-height: (
+        mobile: 60px,
+        desktop: 54px
+);
+
+$market-dropdown-menu-height: 250px;
+
+$col-padding-mobile:  15px;
+$col-padding-tablet:  15px;
+$col-padding-desktop: 15px;
+
+// Fonts
+$font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$font-weight: 300px !default;
+$font-size:   15px;
+
+// Colors
+$heading-color: #333 !default;
+$text-color: #222 !default;
+$text-muted-color: #ddd !default;
+
+$color-muted: #999;
+$color-default: #DDD;
+$color-danger: #ef4343;
+$color-warning: #f18d05;
+$color-success: #8cc542;
+$color-primary: #4b77b9;
+
+// Link color
+$color-link: $color-primary !default;
+$color-link-hover: darken($color-primary , 20%) !default;
+
+// Button text colors
+$btn-light-text: #fff !default;
+$btn-dark-text: #444 !default;
+
+// Button background color
+$btn-color-default: #DDD;
+$btn-color-danger: #EE605A;
+$btn-color-warning: #f18d05;
+$btn-color-success: #8cc542;
+$btn-color-primary: #4b76ba;
+
+// Share buttons colors
+$bg-color-fb: #435fad;
+$bg-color-tw: #00aced;
+$bg-color-gplus: #cb3f2e;
+$bg-color-pinterest: #bd081c;
+$bg-color-vk: #5f83aa;
+
+$icon-colors: #8CC542,
+              #fec806,
+              #a82e09,
+              #034aa6,
+              #FDC803,
+              #b6ae96,
+              #f24848,
+              #7d3d2b;
+
+// Border-radius
+$input-border-radius: 0.25rem;
+$button-border-radius: 0.25rem;
+
+$input-height: 2.89rem;
+
+//side Menu
+
+$side-menu-anumation-duration: 0.5s;
+$side-menu-width: 240px;
+
+// Modals
+// -------------------------------
+
+$modal-animate-duration: 0.5s;
+$modal-bg-color:                  #fff !default;
+$modal-backdrop-bg-active:        rgba(0,0,0,0.5) !default;
+$modal-backdrop-bg-inactive:      rgba(0,0,0,0) !default;
+
+$modal-inset-mode-break-point:    680px !default;  // @media min-width
+$modal-inset-mode-top:            20% !default;
+$modal-inset-mode-right:          20% !default;
+$modal-inset-mode-bottom:         20% !default;
+$modal-inset-mode-left:           20% !default;
+$modal-inset-mode-min-height:     240px !default;
+
+$z-index-modal:                   10 !default;

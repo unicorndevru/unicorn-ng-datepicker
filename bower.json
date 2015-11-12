@@ -1,0 +1,26 @@
+{
+  "name": "unicorn-ng-datepicker",
+  "homepage": "https://github.com/unicorndevru/unicorn-ng-datepicker",
+  "authors": [
+    "Unicorn"
+  ],
+  "description": "Datepicker for Angular.js",
+  "main": "",
+  "moduleType": [],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "~1.4.4",
+    "angular-moment": "~0.10.2",
+    "angular": "~1.4.4",
+    "ramda": "~0.17.1",
+    "moment": "~2.10.6"
+  }
+}

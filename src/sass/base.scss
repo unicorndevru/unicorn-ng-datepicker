@@ -1,0 +1,21 @@
+@import 'src/sass/variables/variables';
+@import 'src/sass/mixins/breakpoint';
+@import 'src/sass/mixins/vertical_rythm';
+@import 'src/sass/mixins/btn';
+@import 'src/sass/screen/normalize3';
+
+.input {
+  padding: grid-units(0.15) grid-units(1);
+  width: 100%;
+  height: $input-height;
+  appearance: none;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: $input-border-radius;
+  -webkit-appearance: none;
+  @extend .form-transition;
+}
+
+body {
+  font-size: 14px;
+}
