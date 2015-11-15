@@ -10,6 +10,7 @@ var templateCache = require('gulp-angular-templatecache')
 
 const srcPath = './src/';
 const distPath = './dist/';
+const partsPath = distPath + 'parts/';
 
 gulp.task('watch', watchTask);
 
@@ -28,24 +29,23 @@ function watchTask() {
     return gulp.watch('./src/**', ['build']);
 }
 
-var jsFilename = 'unicorn-ng-datepicker.js';
 function jsTask() {
   gulp.src('./src/**/*.js')
     .pipe(babel())
     .pipe(ngAnnotate())
-    .pipe(concat(jsFilename, {newLine: ';\n'}))
-    .pipe(gulp.dest(distPath))
+    .pipe(concat('_modules.js', {newLine: ';\n'}))
+    .pipe(gulp.dest(partsPath))
 }
 
 function templatesTask() {
   gulp.src('./src/**/*.jade')
     .pipe(jade())
-    .pipe(templateCache('templates.js', {
+    .pipe(templateCache('_templates.js', {
       module: 'componentsTemplates',
       root: '/src',
       standalone:true
     }))
-    .pipe(gulp.dest(distPath))
+    .pipe(gulp.dest(partsPath))
 }
 
 function sassTask() {
@@ -57,19 +57,19 @@ function sassTask() {
 
 function iconsTask() {
   gulp.src('./src/**/*.svg')
-    .pipe(templateCache('icons.js', {
+    .pipe(templateCache('_icons.js', {
       templateHeader: "(function(){\n  var factoryName = \"<%= module %>\".replace(/\.(\w)/, function(match){return match.toUpperCase}) + 'Cache'\n  angular.module(\"<%= module %>\"<%= standalone %>)\n  .factory(factoryName, ['$templateCache', function($templateCache){\n    var keys = []\n    return {\n      put: function(key, value){\n        keys.push(key)\n        return $templateCache.put(key, value);\n      },\n      keys: function(){\n        return keys;\n      }\n    }\n    }])\n  .run([factoryName, function($templateCache) {",
       templateFooter: "}]);})()",
       root: '/src',
       module: 'svgIcons',
       standalone: true
     }))
-    .pipe(gulp.dest(distPath));
+    .pipe(gulp.dest(partsPath));
 }
 
 function bundleTask() {
-  gulp.src(distPath + '**/*.js')
-    .pipe(concat('all.js', {newLine: ';\n'}))
+  gulp.src(partsPath + '**/*.js')
+    .pipe(concat('unicorn-ng-datepicker.js', {newLine: ';\n'}))
     .pipe(uglify())
     .pipe(gulp.dest(distPath))
 }

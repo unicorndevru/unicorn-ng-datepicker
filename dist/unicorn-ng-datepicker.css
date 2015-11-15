@@ -1,6 +1,3 @@
-date-format {
-  display: inline; }
-
 .show-baseline {
   background-image: linear-gradient(to bottom, #367eed 0%, transparent 5%);
   background-size: 100% 0.75rem;
@@ -1584,7 +1581,43 @@ td {
         display: inline-block;
         width: auto; } }
 
-date-format {
+icons {
+  display: inline-block;
+  vertical-align: baseline;
+  position: relative; }
+  icons i + i svg {
+    position: absolute;
+    bottom: 2px;
+    left: 0; }
+  icons span, icons i {
+    vertical-align: baseline; }
+  icons i {
+    display: inline-block; }
+  icons svg {
+    width: 14px;
+    height: 14px; }
+  icons.f24p {
+    top: rem(4px); }
+    icons.f24p svg {
+      width: 18px;
+      height: 18px; }
+  icons.f30p {
+    top: rem(4px); }
+    icons.f30p svg {
+      width: 24px;
+      height: 24px; }
+  icons.caution {
+    fill: #EE605A; }
+  icons.text-primary {
+    fill: #4b77b9; }
+  icons.text-success {
+    fill: #8cc542; }
+  icons.text-warning {
+    fill: #f18d05; }
+  icons.text-danger {
+    fill: #ef4343; }
+
+datepicker-date-format {
   display: inline; }
 
 datepicker {
@@ -1680,24 +1713,20 @@ datepicker-month-grid {
       transition: background-color .15s ease-in;
       border-radius: 3px;
       background-color: transparent; }
-  datepicker-month-grid .day-disabled-before {
-    display: block;
-    position: absolute;
-    right: -1px;
-    width: 1px;
-    height: 100%;
-    top: 0px;
-    transition: background-color .15s ease-in;
-    background-color: transparent; }
+  datepicker-month-grid .day-disabled-before,
   datepicker-month-grid .day-disabled-after {
     display: block;
     position: absolute;
-    left: -1px;
     width: 1px;
     height: 100%;
     top: 0px;
     transition: background-color .15s ease-in;
-    background-color: transparent; }
+    background-color: transparent;
+    z-index: 10; }
+  datepicker-month-grid .day-disabled-before {
+    right: -1px; }
+  datepicker-month-grid .day-disabled-after {
+    left: -1px; }
 
 modal.modal-datapicker {
   max-width: 500px;
@@ -1705,42 +1734,6 @@ modal.modal-datapicker {
   modal.modal-datapicker .controls {
     padding: 1em;
     float: right; }
-
-icons {
-  display: inline-block;
-  vertical-align: baseline;
-  position: relative; }
-  icons i + i svg {
-    position: absolute;
-    bottom: 2px;
-    left: 0; }
-  icons span, icons i {
-    vertical-align: baseline; }
-  icons i {
-    display: inline-block; }
-  icons svg {
-    width: 14px;
-    height: 14px; }
-  icons.f24p {
-    top: rem(4px); }
-    icons.f24p svg {
-      width: 18px;
-      height: 18px; }
-  icons.f30p {
-    top: rem(4px); }
-    icons.f30p svg {
-      width: 24px;
-      height: 24px; }
-  icons.caution {
-    fill: #EE605A; }
-  icons.text-primary {
-    fill: #4b77b9; }
-  icons.text-success {
-    fill: #8cc542; }
-  icons.text-warning {
-    fill: #f18d05; }
-  icons.text-danger {
-    fill: #ef4343; }
 
 modal-close {
   text-align: center;
