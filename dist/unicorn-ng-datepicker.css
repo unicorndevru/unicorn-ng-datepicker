@@ -1278,9 +1278,13 @@ datepicker {
     cursor: pointer;
     z-index: 10; }
   datepicker .icon {
-    top: 0.7em;
+    top: 0.8em;
     position: absolute;
     right: 1em; }
+    datepicker .icon svg {
+      fill: #4b77b9;
+      width: 24px;
+      height: 24px; }
 
 datepicker-grid {
   display: block;
@@ -1311,19 +1315,19 @@ datepicker-grid-controls {
     background-color: transparent;
     color: #4b77b9;
     transition: color 0.3s ease-in-out; }
-    datepicker-grid-controls .grid-controls-arrows icons {
+    datepicker-grid-controls .grid-controls-arrows .icon svg {
       fill: #4b77b9; }
     datepicker-grid-controls .grid-controls-arrows:hover {
       background-color: transparent;
       color: #2c4872; }
-      datepicker-grid-controls .grid-controls-arrows:hover icons {
+      datepicker-grid-controls .grid-controls-arrows:hover .icon svg {
         fill: #2c4872; }
-    datepicker-grid-controls .grid-controls-arrows icons {
+    datepicker-grid-controls .grid-controls-arrows .icon {
       position: relative;
       top: 0.3em; }
-      datepicker-grid-controls .grid-controls-arrows icons svg {
-        width: 2em;
-        height: 2em; }
+      datepicker-grid-controls .grid-controls-arrows .icon svg {
+        width: 1.6em;
+        height: 1.6em; }
 
 datepicker-month-grid {
   display: block; }
@@ -1350,12 +1354,12 @@ datepicker-month-grid {
     background: none;
     color: #4b77b9;
     transition: color 0.3s ease-in-out; }
-    datepicker-month-grid .day-of-month icons {
+    datepicker-month-grid .day-of-month .icons svg {
       fill: #4b77b9; }
     datepicker-month-grid .day-of-month:hover {
       background-color: transparent;
       color: #2c4872; }
-      datepicker-month-grid .day-of-month:hover icons {
+      datepicker-month-grid .day-of-month:hover .icons svg {
         fill: #2c4872; }
     datepicker-month-grid .day-of-month.selected {
       font-weight: 400;
@@ -1394,6 +1398,7 @@ datepicker-month-grid {
       left: 50%;
       width: 6px;
       height: 6px;
+      margin-top: 3px;
       margin-left: -3px;
       content: '';
       transition: background-color .15s ease-in;
@@ -1421,42 +1426,6 @@ modal.modal-datapicker {
     padding: 1em;
     float: right; }
 
-icons {
-  display: inline-block;
-  vertical-align: baseline;
-  position: relative; }
-  icons i + i svg {
-    position: absolute;
-    bottom: 2px;
-    left: 0; }
-  icons span, icons i {
-    vertical-align: baseline; }
-  icons i {
-    display: inline-block; }
-  icons svg {
-    width: 14px;
-    height: 14px; }
-  icons.f24p {
-    top: rem(4px); }
-    icons.f24p svg {
-      width: 18px;
-      height: 18px; }
-  icons.f30p {
-    top: rem(4px); }
-    icons.f30p svg {
-      width: 24px;
-      height: 24px; }
-  icons.caution {
-    fill: #EE605A; }
-  icons.text-primary {
-    fill: #4b77b9; }
-  icons.text-success {
-    fill: #8cc542; }
-  icons.text-warning {
-    fill: #f18d05; }
-  icons.text-danger {
-    fill: #ef4343; }
-
 modal-close {
   text-align: center;
   display: block;
@@ -1467,12 +1436,12 @@ modal-close {
     right: 1rem;
     top: 1.1rem;
     z-index: 1000; }
-  modal-close icons {
+  modal-close .icon {
     transition: fill .15s ease-in-out; }
-    modal-close icons svg {
+    modal-close .icon svg {
       width: 20px;
       height: 20px; }
-  modal-close:hover icons {
+  modal-close:hover .icon {
     fill: #ccc; }
 
 @-webkit-keyframes modal-fadeout {

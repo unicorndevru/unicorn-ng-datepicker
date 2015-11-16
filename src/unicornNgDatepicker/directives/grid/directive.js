@@ -1,4 +1,4 @@
-angular.module('unicornNgDatepicker').directive('datepickerGrid', function(){
+angular.module('unicornNgDatepicker').directive('datepickerGrid', function(moment){
   return {
     restrict: 'E',
 

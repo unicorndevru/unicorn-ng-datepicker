@@ -11,7 +11,7 @@ modal-close {
     z-index: 1000;
   }
 
-  icons {
+  .icon {
     svg {
       width: 20px;
       height: 20px;
@@ -20,7 +20,7 @@ modal-close {
   }
 
   &:hover {
-    icons {
+    .icon {
       fill: #ccc;
     }
   }

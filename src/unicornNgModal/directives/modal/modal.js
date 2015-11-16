@@ -1,4 +1,4 @@
-angular.module('unicornNgModal').directive('modal', function($templateCache, $compile) {
+angular.module('unicornNgModal').directive('modal', function($templateCache, $compile, $document) {
   return {
     restrict: 'E',
     terminal: true,
@@ -11,6 +11,18 @@ angular.module('unicornNgModal').directive('modal', function($templateCache, $co
           layout.find('section').append(modal);
           element.empty();
           element.append(layout);
+
+          function closeHandler(e) {
+            if(e.keyCode == 27) {
+              scope.modal.close()
+            }
+          }
+
+          $document.on('keydown', closeHandler)
+          scope.$on('$destroy', () => {
+            $document.off('keydown', closeHandler)
+          })
+
           return $compile(layout)(scope);
         }
       };

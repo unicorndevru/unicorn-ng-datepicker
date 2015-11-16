@@ -1,3 +1,5 @@
+@import 'src/sass/variables/variables';
+
 datepicker {
   display: block;
   position: relative;
@@ -9,8 +11,14 @@ datepicker {
     z-index: 10;
   }
   .icon {
-    top: 0.7em;
+    top: 0.8em;
     position: absolute;
     right: 1em;
+
+    svg {
+      fill: $color-link;
+      width: 24px;
+      height: 24px;
+    }
   }
 }

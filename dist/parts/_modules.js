@@ -3,9 +3,6 @@
 angular.module('unicornNgDatepicker', ['componentsTemplates']);;
 'use strict';
 
-angular.module('unicornNgIcons', ['componentsTemplates', 'svgIcons']);;
-'use strict';
-
 angular.module('unicornNgModal', ['componentsTemplates']);;
 'use strict';
 
@@ -226,7 +223,7 @@ angular.module('unicornNgDatepicker').directive('datepicker', ["datepickerModal"
 }]);;
 'use strict';
 
-angular.module('unicornNgDatepicker').directive('datepickerGrid', function () {
+angular.module('unicornNgDatepicker').directive('datepickerGrid', ["moment", function (moment) {
   return {
     restrict: 'E',
 
@@ -256,37 +253,6 @@ angular.module('unicornNgDatepicker').directive('datepickerGrid', function () {
         }
         scope.dates = ngModelCtrl.$modelValue;
       };
-    }
-  };
-});;
-'use strict';
-
-angular.module('unicornNgDatepicker').directive('datepickerInputFormat', ["moment", function (moment) {
-  var formatDate = R.curry(function (format, value) {
-    return moment(value).format(format);
-  });
-
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-
-    link: function link(scope, element, attrs, ngModelCtrl) {
-      var formatter = formatDate(attrs.datepickerInputFormat);
-
-      ngModelCtrl.$formatters.push(function (value) {
-        value = R.filter(R.compose(R.not, R.isNil), [].concat(value));
-
-        if (!value || value.length === 0) {
-          return '';
-        }
-
-        if (R.is(Array, value)) {
-          value = R.map(formatter, value);
-          return value.join('—');
-        } else {
-          return formatter(value);
-        }
-      });
     }
   };
 }]);;
@@ -361,6 +327,37 @@ angular.module('unicornNgDatepicker').directive('datepickerGridControls', ["mome
       ngModelCtrl.$render = function () {
         scope.selectedMonth = ngModelCtrl.$modelValue || +new Date();
       };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerInputFormat', ["moment", function (moment) {
+  var formatDate = R.curry(function (format, value) {
+    return moment(value).format(format);
+  });
+
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+      var formatter = formatDate(attrs.datepickerInputFormat);
+
+      ngModelCtrl.$formatters.push(function (value) {
+        value = R.filter(R.compose(R.not, R.isNil), [].concat(value));
+
+        if (!value || value.length === 0) {
+          return '';
+        }
+
+        if (R.is(Array, value)) {
+          value = R.map(formatter, value);
+          return value.join('—');
+        } else {
+          return formatter(value);
+        }
+      });
     }
   };
 }]);;
@@ -520,32 +517,6 @@ angular.module('unicornNgDatepicker').factory('datepickerModal', ["modal", "$roo
 }]);;
 'use strict';
 
-angular.module('unicornNgIcons').directive('icons', ["$templateCache", function ($templateCache) {
-  var wrap = R.curry(function (tagName, content) {
-    return ["<", tagName, ">", content, "</", tagName, ">"].join('');
-  });
-
-  var iconTemplate = function iconTemplate(path) {
-    return $templateCache.get('/src/unicornNgIcons/directives/icons/' + path + '.svg');
-  };
-
-  return {
-    restrict: 'E',
-
-    link: function link(scope, element, attrs) {
-
-      attrs.$observe('name', function (name) {
-        if (name) {
-          element.empty();
-          var iconsMarkup = R.compose(R.map(wrap('i')), R.map(iconTemplate))(name.split(/\s*,\s*/));
-          element.append(wrap('span', iconsMarkup.join('')));
-        }
-      });
-    }
-  };
-}]);;
-'use strict';
-
 angular.module('unicornNgModal').directive('modalClose', function () {
   return {
     restrict: 'E',
@@ -557,7 +528,7 @@ angular.module('unicornNgModal').directive('modalClose', function () {
 });;
 'use strict';
 
-angular.module('unicornNgModal').directive('modal', ["$templateCache", "$compile", function ($templateCache, $compile) {
+angular.module('unicornNgModal').directive('modal', ["$templateCache", "$compile", "$document", function ($templateCache, $compile, $document) {
   return {
     restrict: 'E',
     terminal: true,
@@ -570,6 +541,18 @@ angular.module('unicornNgModal').directive('modal', ["$templateCache", "$compile
           layout.find('section').append(modal);
           element.empty();
           element.append(layout);
+
+          function closeHandler(e) {
+            if (e.keyCode == 27) {
+              scope.modal.close();
+            }
+          }
+
+          $document.on('keydown', closeHandler);
+          scope.$on('$destroy', function () {
+            $document.off('keydown', closeHandler);
+          });
+
           return $compile(layout)(scope);
         }
       };

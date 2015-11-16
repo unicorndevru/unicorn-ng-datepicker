@@ -26,21 +26,21 @@ datepicker-grid-controls {
     color: $color-link;
     transition: color 0.3s ease-in-out;
 
-    icons {fill:$color-link;}
+    .icon svg {fill:$color-link;}
 
     &:hover {
       background-color: transparent;
       color: $color-link-hover;
 
-      icons {fill:$color-link-hover;}
+      .icon svg {fill:$color-link-hover;}
     }
 
-    icons {
+    .icon {
       position: relative;
       top: 0.3em;
       svg {
-        width: 2em;
-        height: 2em;
+        width: 1.6em;
+        height: 1.6em;
       }
     }
   }

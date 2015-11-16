@@ -32,13 +32,13 @@ datepicker-month-grid {
     color: $color-link;
     transition: color 0.3s ease-in-out;
 
-    icons {fill:$color-link;}
+    .icons svg {fill:$color-link;}
 
     &:hover {
       background-color: transparent;
       color: $color-link-hover;
 
-      icons {fill:$color-link-hover;}
+      .icons svg {fill:$color-link-hover;}
     }
 
     &.selected {
@@ -100,6 +100,7 @@ datepicker-month-grid {
       left: 50%;
       width: 6px;
       height: 6px;
+      margin-top: 3px;
       margin-left: -3px;
 
       content: '';
