@@ -1,12 +1,9 @@
 'use strict';
 
-angular.module('unicornNgBtn', ['componentsTemplates']);;
+angular.module('unicornNgDatepicker', ['componentsTemplates']);;
 'use strict';
 
 angular.module('unicornNgIcons', ['componentsTemplates', 'svgIcons']);;
-'use strict';
-
-angular.module('unicornNgDatepicker', ['componentsTemplates']);;
 'use strict';
 
 angular.module('unicornNgModal', ['componentsTemplates']);;
@@ -142,54 +139,6 @@ angular.module('unicornNgModal').factory('windowPopup', ["$window", function ($w
 }]);;
 'use strict';
 
-angular.module('unicornNgBtn').directive('btnLayout', function () {
-  return {
-    restrict: 'A',
-    link: function link(scope, element, attrs) {
-      var classes;
-      classes = '';
-      return attrs.$observe('btnLayout', function (value) {
-        var buttonClass, newClasses;
-        if (value) {
-          buttonClass = function (name) {
-            return "button-" + name;
-          };
-          newClasses = R.join(' ', ['button'].concat(R.map(buttonClass, value.split(/[\s,]+/))));
-          attrs.$updateClass(newClasses, classes);
-          return classes = newClasses;
-        }
-      });
-    }
-  };
-});;
-'use strict';
-
-angular.module('unicornNgIcons').directive('icons', ["$templateCache", function ($templateCache) {
-  var wrap = R.curry(function (tagName, content) {
-    return ["<", tagName, ">", content, "</", tagName, ">"].join('');
-  });
-
-  var iconTemplate = function iconTemplate(path) {
-    return $templateCache.get('/src/unicornNgIcons/directives/icons/' + path + '.svg');
-  };
-
-  return {
-    restrict: 'E',
-
-    link: function link(scope, element, attrs) {
-
-      attrs.$observe('name', function (name) {
-        if (name) {
-          element.empty();
-          var iconsMarkup = R.compose(R.map(wrap('i')), R.map(iconTemplate))(name.split(/\s*,\s*/));
-          element.append(wrap('span', iconsMarkup.join('')));
-        }
-      });
-    }
-  };
-}]);;
-'use strict';
-
 angular.module('unicornNgDatepicker').directive('datepickerDateFormat', ["moment", function (moment) {
   return {
     restrict: 'E',
@@ -312,6 +261,37 @@ angular.module('unicornNgDatepicker').directive('datepickerGrid', function () {
 });;
 'use strict';
 
+angular.module('unicornNgDatepicker').directive('datepickerInputFormat', ["moment", function (moment) {
+  var formatDate = R.curry(function (format, value) {
+    return moment(value).format(format);
+  });
+
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+      var formatter = formatDate(attrs.datepickerInputFormat);
+
+      ngModelCtrl.$formatters.push(function (value) {
+        value = R.filter(R.compose(R.not, R.isNil), [].concat(value));
+
+        if (!value || value.length === 0) {
+          return '';
+        }
+
+        if (R.is(Array, value)) {
+          value = R.map(formatter, value);
+          return value.join('—');
+        } else {
+          return formatter(value);
+        }
+      });
+    }
+  };
+}]);;
+'use strict';
+
 angular.module('unicornNgDatepicker').directive('datepickerGridControls', ["moment", function (moment) {
   return {
     restrict: 'E',
@@ -381,37 +361,6 @@ angular.module('unicornNgDatepicker').directive('datepickerGridControls', ["mome
       ngModelCtrl.$render = function () {
         scope.selectedMonth = ngModelCtrl.$modelValue || +new Date();
       };
-    }
-  };
-}]);;
-'use strict';
-
-angular.module('unicornNgDatepicker').directive('datepickerInputFormat', ["moment", function (moment) {
-  var formatDate = R.curry(function (format, value) {
-    return moment(value).format(format);
-  });
-
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-
-    link: function link(scope, element, attrs, ngModelCtrl) {
-      var formatter = formatDate(attrs.datepickerInputFormat);
-
-      ngModelCtrl.$formatters.push(function (value) {
-        value = R.filter(R.compose(R.not, R.isNil), [].concat(value));
-
-        if (!value || value.length === 0) {
-          return '';
-        }
-
-        if (R.is(Array, value)) {
-          value = R.map(formatter, value);
-          return value.join('—');
-        } else {
-          return formatter(value);
-        }
-      });
     }
   };
 }]);;
@@ -517,8 +466,8 @@ angular.module('unicornNgDatepicker').directive('datepickerMonthGrid', ["moment"
             isSelected: isSelected(dayDate),
             isDisabled: isDisabled(dayDate, todayMs, disableBeforeMs, disableAfterMs),
             isToday: +dayDate == todayMs,
-            isDisabledBefore: disableBeforeMs ? disableBeforeMs == dayDate + dayLengthMs : false,
-            isDisabledAfter: disableAfterMs ? disableAfterMs == dayDate - dayLengthMs : false
+            isDisabledBefore: disableBeforeMs ? disableBeforeMs == dayDate : false,
+            isDisabledAfter: disableAfterMs ? disableAfterMs == dayDate : false
           };
         }, R.times(R.identity, date.daysInMonth()));
         days = prevMonthDays.concat(days);
@@ -567,6 +516,32 @@ angular.module('unicornNgDatepicker').factory('datepickerModal', ["modal", "$roo
     overlayScope.options = options;
 
     return modal('/src/unicornNgDatepicker/services/datepickerModal/template.html', overlayScope);
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgIcons').directive('icons', ["$templateCache", function ($templateCache) {
+  var wrap = R.curry(function (tagName, content) {
+    return ["<", tagName, ">", content, "</", tagName, ">"].join('');
+  });
+
+  var iconTemplate = function iconTemplate(path) {
+    return $templateCache.get('/src/unicornNgIcons/directives/icons/' + path + '.svg');
+  };
+
+  return {
+    restrict: 'E',
+
+    link: function link(scope, element, attrs) {
+
+      attrs.$observe('name', function (name) {
+        if (name) {
+          element.empty();
+          var iconsMarkup = R.compose(R.map(wrap('i')), R.map(iconTemplate))(name.split(/\s*,\s*/));
+          element.append(wrap('span', iconsMarkup.join('')));
+        }
+      });
+    }
   };
 }]);;
 'use strict';

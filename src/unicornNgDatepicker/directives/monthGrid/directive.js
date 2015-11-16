@@ -102,8 +102,8 @@ angular.module('unicornNgDatepicker').directive('datepickerMonthGrid', function(
             isSelected: isSelected(dayDate),
             isDisabled: isDisabled(dayDate, todayMs, disableBeforeMs, disableAfterMs),
             isToday: +dayDate == todayMs,
-            isDisabledBefore: disableBeforeMs ? disableBeforeMs == dayDate + dayLengthMs : false,
-            isDisabledAfter: disableAfterMs ? disableAfterMs == dayDate - dayLengthMs : false
+            isDisabledBefore: disableBeforeMs ? disableBeforeMs == dayDate : false,
+            isDisabledAfter: disableAfterMs ? disableAfterMs == dayDate : false
           }
         }, R.times(R.identity, date.daysInMonth()))
         days = prevMonthDays.concat(days)

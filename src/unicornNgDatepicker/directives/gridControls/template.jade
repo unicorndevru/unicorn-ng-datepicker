@@ -1,8 +1,8 @@
-button(btn-layout="link" ng-click="shift(-1)" class="grid-controls-arrows")
+button(ng-click="shift(-1)" class="grid-controls-arrows")
   icons(name="eight/arrows/left" ng-disabled="isMin()")
 
 span.grid-controls-month
   datepicker-date-format(value="selectedMonth" format="MMM, YYYY")
     
-button(btn-layout="link" ng-click="shift(1)" class="grid-controls-arrows")
+button(ng-click="shift(1)" class="grid-controls-arrows")
   icons(name="eight/arrows/right" ng-disabled="isMax()")

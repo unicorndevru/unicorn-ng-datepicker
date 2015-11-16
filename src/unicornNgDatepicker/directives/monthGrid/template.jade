@@ -6,8 +6,8 @@ section
   .month-row(ng-repeat="week in weeks")
     .month-col(ng-repeat="day in week")
       button.day-of-month(        
-        btn-layout="link block"
-        ng-class="{ empty: !day.day, selected: day.isSelected, 'button-disabled': day.isDisabled, today: day.isToday, 'disabled-after': day.isDisabledAfter, 'disabled-before': day.isDisabledBefore}",
+        ng-disabled="{{ day.isDisabled }}"
+        ng-class="{ empty: !day.day, selected: day.isSelected, today: day.isToday, 'disabled-after': day.isDisabledAfter, 'disabled-before': day.isDisabledBefore}",
         ng-click="day.date && selectDate(day.date)")
         span.day-text(ng-if="day.day")
           | {{ day.day }}
