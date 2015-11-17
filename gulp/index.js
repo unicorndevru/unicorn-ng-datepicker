@@ -1,62 +1,61 @@
 var gulp = require('gulp');
 var ngAnnotate = require('gulp-ng-annotate');
 var uglify = require('gulp-uglify');
+var del = require('del')
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var babel = require('gulp-babel');
 var jade = require('gulp-jade')
 var uglify = require('gulp-uglify')
+var merge2 = require('merge2')
 var templateCache = require('gulp-angular-templatecache')
+var bower = require('main-bower-files')
+var gulpFilter = require('gulp-filter')
+var angularFilesort = require('gulp-angular-filesort')
 
-const srcPath = './src/';
 const distPath = './dist/';
-const partsPath = distPath + 'parts/';
 
-gulp.task('watch', watchTask);
+gulp.task('build', ['clean', 'js', 'styles']);
+gulp.task('default', ['bower', 'build', 'watch']);
 
-// Build Tasks //
-gulp.task('js', jsTask);
-gulp.task('sass', sassTask);
-gulp.task('templates', templatesTask);
-gulp.task('bundle', bundleTask);
-gulp.task('build', ['js', 'sass', 'templates',  'bundle']);
+gulp.task('watch', () => {
+  return gulp.watch('./src/**/*', ['build']);
+})
 
-// Default //
-gulp.task('default', ['build', 'watch']);
+gulp.task('clean', () => {
+  return del.sync(distPath)
+})
 
-function watchTask() {
-  return gulp.watch('./src/**/*.*', ['build']);
-}
+gulp.task('bower', function () {
+  return gulp.src(bower())
+    .pipe(gulpFilter('**/*.js'))
+    .pipe(concat('vendor.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest(distPath))
+})
 
-function jsTask() {
-  gulp.src('./src/**/*.js')
-    .pipe(babel())
-    .pipe(ngAnnotate())
-    .pipe(concat('_modules.js', {newLine: ';\n'}))
-    .pipe(gulp.dest(partsPath))
-}
+gulp.task('js', function () {
+  return merge2(
+    gulp.src('./src/**/*.js')
+      .pipe(babel())
+      .pipe(angularFilesort())
+      .pipe(ngAnnotate()),
 
-function templatesTask() {
-  gulp.src('./src/**/*.jade')
-    .pipe(jade())
-    .pipe(templateCache('_templates.js', {
-      module: 'componentsTemplates',
-      root: '/src',
-      standalone:true
-    }))
-    .pipe(gulp.dest(partsPath))
-}
+    gulp.src('./src/**/*.jade')
+      .pipe(jade())
+      .pipe(templateCache('_templates.js', {
+        module: 'componentsTemplates',
+        root: '/src',
+        standalone:true
+      }))
+  )
+  .pipe(concat('unicorn-ng-datepicker.js', {newLine: ';\n'}))
+  .pipe(gulp.dest(distPath))
+})
 
-function sassTask() {
+gulp.task('styles', function sassTask() {
   gulp.src('./src/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('unicorn-ng-datepicker.css'))
     .pipe(gulp.dest(distPath))
-}
-
-function bundleTask() {
-  gulp.src(partsPath + '**/*.js')
-    .pipe(concat('unicorn-ng-datepicker.js', {newLine: ';\n'}))
-    .pipe(uglify())
-    .pipe(gulp.dest(distPath))
-}
+});

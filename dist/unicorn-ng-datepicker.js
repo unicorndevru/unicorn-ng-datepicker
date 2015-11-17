@@ -1,1 +1,570 @@
-"use strict";angular.module("unicornNgDatepicker",["componentsTemplates"]),angular.module("unicornNgModal",["componentsTemplates"]),angular.module("unicornNgModal").factory("modal",["$rootScope","$q","$compile","$document","$templateCache","$timeout",function(e,t,n,o,i,a){var r,s,d,l=0;return d={},s="/src/unicornNgModal/directives/modal/modalWrap.html",r=function(){function r(n,o,i){this.layoutTemplateUrl=n,this.options=i,this.scope=o||e,this.deferred=t.defer(),this.promise=this.deferred.promise,this.id="modal_"+ ++l,this.scope.$on("$destroy",function(e){return function(){return d[e.id]?e.close():void 0}}(this))}return r.animationDuration=500,r.prototype.isOpen=function(){return void 0!==d[this.id]},r.prototype.close=function(e){return this.isOpen()?(this.layout.addClass("modal_closing"),a(function(e){return function(){return d[e.id]=void 0,e.layout&&(e.layout.remove(),e.layout=void 0),e.modalScope.$destroy(),e.modalScope=void 0,0===R.filter(R.identity,R.values(d)).length?o.find("body").removeClass("modal-open"):void 0}}(this),r.animationDuration),this.deferred.resolve(e)):void 0},r.prototype.show=function(){var e,t,l,c;if(this.isOpen()&&close(),l=this,c=this.scope.$new(),this.modalScope=c,this.modalScope.$on("$destroy",function(){return l.isOpen()?l.close():void 0}),c.modal={id:this.id,options:this.options,close:function(){return l.close.apply(l,arguments)},promise:this.promise},t=angular.element(i.get(s)),e=i.get(this.layoutTemplateUrl),0===t.length)throw new Error("Can't find template "+s);if(!e)throw new Error("Can't find template "+this.layoutTemplateUrl);return t.find("section").append(e),o.find("body").append(t),n(t)(c),this.layout=t,d[this.id]=this,a(function(e){return function(){return o.find("body").hasClass("modal-open")?void 0:o.find("body").addClass("modal-open")}}(this),r.animationDuration),this.promise},r}(),function(e,t,n){var o;return o=new r(e,t,n),o.show(),o}}]),angular.module("unicornNgModal").factory("windowPopup",["$window",function(e){var t;return t={width:600,height:500,personalbar:0,toolbar:0,scrollbars:1,resizable:1},function(n){var o,i,a;return o=t,a=angular.extend(t,{left:Math.round(screen.width/2-o.width/2),top:screen.height>o.height?Math.round(screen.height/3-o.height/2):void 0}),i=e.open(n,R.join(",",R.map(R.join("="),R.toPairs(a)))),i?i.focus():void 0}}]),angular.module("unicornNgDatepicker").directive("datepickerDateFormat",["moment",function(e){return{restrict:"E",templateUrl:"/src/unicornNgDatepicker/directives/dateFormat/template.html",scope:{value:"=",parse:"@",format:"@"},link:function(t,n,o){var i;return i=function(){return void 0!==t.value?t.formattedValue=e(t.value,t.parse).format(t.format):void 0},t.$watch("value",i),i()}}}]),angular.module("unicornNgDatepicker").directive("datepicker",["datepickerModal",function(e){return{restrict:"E",templateUrl:"/src/unicornNgDatepicker/directives/datepicker/template.html",require:"ngModel",scope:{disableBefore:"=",disableAfter:"="},link:function(t,n,o,i){var a={isRange:!1,firstDay:1},r=null;i.$render=function(){t.date=R.filter(R.compose(R.not,R.isNil),[].concat(i.$modelValue))},t.$watch("disableBefore",function(e){a.disableBefore=e>0||0===e?e:null}),t.$watch("disableAfter",function(e){a.disableAfter=e>0||0===e?e:null}),t.$watch("date",function(e){e&&e.length&&(a.isRange?i.$setViewValue([].concat(e)):i.$setViewValue(e[0]))}),t.openDatepicker=function(){return null!==r?r:void(r=e(t.date,a).promise.then(function(e){e&&(t.date=e)})["finally"](function(){r=null}))}}}}]),angular.module("unicornNgDatepicker").directive("datepickerGrid",["moment",function(e){return{restrict:"E",templateUrl:"/src/unicornNgDatepicker/directives/grid/template.html",require:"ngModel",scope:{options:"="},link:function(e,t,n,o){var i=864e5;e.$watch("dates",function(e){e&&o.$setViewValue(e)}),o.$render=function(){o.$modelValue&&0<o.$modelValue.length?e.month=R.last([].concat(o.$modelValue).sort()):e.month=+new Date+i,e.dates=o.$modelValue}}}}]),angular.module("unicornNgDatepicker").directive("datepickerGridControls",["moment",function(e){return{restrict:"E",require:"ngModel",templateUrl:"/src/unicornNgDatepicker/directives/gridControls/template.html",scope:{options:"="},link:function(t,n,o,i){function a(){return e(t.selectedMonth||+new Date)}function r(){return a().startOf("month")}function s(e){return t.options||{}}t.months=R.times(R.identity,12),t.isMin=function(){return s().min?+r()===e(s().min).startOf("month"):!1},t.isMax=function(){return s().max?+r()===e(s().max).startOf("month"):!1},t.shift=function(e){var n=a();n.add(e,"months"),s().max&&(n=R.min(s().max,+n)),s().min&&(n=R.max(s().min,+n)),t.selectedMonth=n},t.$watch("selectedMonth",function(e,t){t!=e&&i.$setViewValue(e)}),i.$render=function(){t.selectedMonth=i.$modelValue||+new Date}}}}]),angular.module("unicornNgDatepicker").directive("datepickerInputFormat",["moment",function(e){var t=R.curry(function(t,n){return e(n).format(t)});return{restrict:"A",require:"ngModel",link:function(e,n,o,i){var a=t(o.datepickerInputFormat);i.$formatters.push(function(e){return e=R.filter(R.compose(R.not,R.isNil),[].concat(e)),e&&0!==e.length?R.is(Array,e)?(e=R.map(a,e),e.join("—")):a(e):""})}}}]),angular.module("unicornNgDatepicker").directive("datepickerMonthGrid",["moment","$animate",function(e,t){return{restrict:"E",require:"ngModel",templateUrl:"/src/unicornNgDatepicker/directives/monthGrid/template.html",scope:{month:"=",options:"="},link:function(n,o,i,a){function r(t){if(t&&a.$modelValue){var n=R.map(function(t){return+e(t).startOf("day")},a.$modelValue).sort(),o=n[0],i=R.last(n),r=+t;return r>=o&&i>=r}}function s(e,t,n,o){if(!e)return!0;var i=!1;return t=t||+new Date,n>0?+n>+e&&(i=!0):0!==n&&+t>+e&&(i=!0),!i&&o>0&&+e>+o&&(i=!0),i}function d(){n.weekDays=R.times(function(e){return(e+n.options.firstDay)%7},7)}function l(){n.weekDays||d();var t=e(n.month).startOf("month"),o=R.times(R.identity,R.indexOf(t.day(),n.weekDays)),i=+e().startOf("day"),a=n.options.disableBefore>0?+e(n.options.disableBefore).startOf("day"):0===n.options.disableBefore?1:i,l=n.options.disableAfter>0?+e(n.options.disableAfter).startOf("day"):null,u=R.map(function(n){var o=e(t).set("date",n+1);return{day:n+1,date:o,isSelected:r(o),isDisabled:s(o,i,a,l),isToday:+o==i,isDisabledBefore:a?a==o:!1,isDisabledAfter:l?l==o:!1}},R.times(R.identity,t.daysInMonth()));u=o.concat(u),n.weeks=c(u,7)}t.enabled(o,!1);var c=function(e,t){for(var n=[];e.length;)n.push(e.splice(0,t));return n},u=R.uniqWith(function(e,t){return e===t});n.selectDate=function(t){t=e(t);var o=a.$modelValue||[];n.options.isRange?1<o.length?o=[+t]:(o.push(+t),o=o.sort(),o=[o[0],R.last(o)]):o=[+t],a.$setViewValue(u(o)),l()},n.$watch("month",function(e,t){e!==t&&l()}),n.$watch("options.firstDay",l),a.$render=function(){l()}}}}]),angular.module("unicornNgDatepicker").factory("datepickerModal",["modal","$rootScope",function(e,t){return function(n,o){var i=t.$new();return i.model=n,i.options=o,e("/src/unicornNgDatepicker/services/datepickerModal/template.html",i)}}]),angular.module("unicornNgModal").directive("modalClose",function(){return{restrict:"E",templateUrl:"/src/unicornNgModal/directives/close/template.html",scope:{close:"&"}}}),angular.module("unicornNgModal").directive("modal",["$templateCache","$compile","$document",function(e,t,n){return{restrict:"E",terminal:!0,compile:function(o,i){return{pre:function(o,i){function a(e){27==e.keyCode&&o.modal.close()}var r,s;return r=angular.element(e.get("/src/unicornNgModal/directives/modal/template.html")),s=angular.element(i.contents()),r.find("section").append(s),i.empty(),i.append(r),n.on("keydown",a),o.$on("$destroy",function(){n.off("keydown",a)}),t(r)(o)}}}}}]),angular.module("componentsTemplates",[]).run(["$templateCache",function(e){e.put("/src/unicornNgDatepicker/directives/dateFormat/template.html",'<span ng-bind="formattedValue"></span>'),e.put("/src/unicornNgDatepicker/directives/datepicker/template.html",'<section><div ng-click="openDatepicker()" class="clicker"></div><input type="text" title="{{ hoverText }}" datepicker-input-format="LL" readonly="true" placeholder="Choose date" ng-model="date" class="input"/><div class="icon"><svg viewBox="0 0 24 24"><path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z"></path></svg></div></section>'),e.put("/src/unicornNgDatepicker/directives/grid/template.html",'<div class="grids"><datepicker-grid-controls ng-model="month"></datepicker-grid-controls><datepicker-month-grid ng-model="dates" month="month" options="options"></datepicker-month-grid></div>'),e.put("/src/unicornNgDatepicker/directives/gridControls/template.html",'<button ng-click="shift(-1)" class="grid-controls-arrows"><div class="icon"><svg viewBox="0 0 24 24"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg></div></button><span class="grid-controls-month"><datepicker-date-format value="selectedMonth" format="MMM, YYYY"></datepicker-date-format></span><button ng-click="shift(1)" class="grid-controls-arrows"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path></svg></div></button>'),e.put("/src/unicornNgDatepicker/directives/monthGrid/template.html",'<div class="month-row"><div ng-repeat="weekDay in weekDays" class="month-col day-of-week">   <datepicker-date-format value="weekDay" parse="E" format="dd"></datepicker-date-format></div></div><section>   <div ng-repeat="week in weeks" class="month-row"><div ng-repeat="day in week" class="month-col"><button ng-disabled="{{ day.isDisabled }}" ng-class="{ empty: !day.day, selected: day.isSelected, today: day.isToday, \'disabled-after\': day.isDisabledAfter, \'disabled-before\': day.isDisabledBefore}" ng-click="day.date &amp;&amp; selectDate(day.date)" class="day-of-month"><span ng-if="day.day" class="day-text">{{ day.day }}</span><span class="day-today"></span><span class="day-disabled-before"></span><span class="day-disabled-after"></span></button></div></div></section>'),e.put("/src/unicornNgDatepicker/services/datepickerModal/template.html",'<modal name="datepicker.modal" class="modal-datapicker"> <datepicker-grid ng-model="model" options="options" ng-change="modal.close(model)"></datepicker-grid></modal>'),e.put("/src/unicornNgModal/directives/close/template.html",'<span ng-click="close()" title="close"><div class="icon"><svg viewBox="0 0 24 24"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg></div></span>'),e.put("/src/unicornNgModal/directives/modal/modalWrap.html",'<div id="{{ modal.id }}" class="modal"><div ng-click="modal.close()" class="modal_overlay"></div><section class="modal_content"></section></div>'),e.put("/src/unicornNgModal/directives/modal/template.html",'<div><modal-close close="modal.close()" ng-if="modal.options.isShowClose != false"></modal-close><section></section></div>')}]);
+'use strict';
+
+angular.module('unicornNgModal', ['componentsTemplates']);;
+'use strict';
+
+angular.module('unicornNgModal').directive('modal', ["$templateCache", "$compile", "$document", function ($templateCache, $compile, $document) {
+  return {
+    restrict: 'E',
+    terminal: true,
+    compile: function compile(element, attrs) {
+      return {
+        pre: function pre(scope, element) {
+          var layout, modal;
+          layout = angular.element($templateCache.get("/src/unicornNgModal/directives/modal/template.html"));
+          modal = angular.element(element.contents());
+          layout.find('section').append(modal);
+          element.empty();
+          element.append(layout);
+
+          function closeHandler(e) {
+            if (e.keyCode == 27) {
+              scope.modal.close();
+            }
+          }
+
+          $document.on('keydown', closeHandler);
+          scope.$on('$destroy', function () {
+            $document.off('keydown', closeHandler);
+          });
+
+          return $compile(layout)(scope);
+        }
+      };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgModal').directive('modalClose', function () {
+  return {
+    restrict: 'E',
+    templateUrl: '/src/unicornNgModal/directives/close/template.html',
+    scope: {
+      close: '&'
+    }
+  };
+});;
+'use strict';
+
+angular.module('unicornNgDatepicker', ['componentsTemplates']);;
+'use strict';
+
+angular.module('unicornNgDatepicker').factory('datepickerModal', ["modal", "$rootScope", function (modal, $rootScope) {
+  return function (model, options) {
+    var overlayScope = $rootScope.$new();
+    overlayScope.model = model;
+    overlayScope.options = options;
+
+    return modal('/src/unicornNgDatepicker/services/datepickerModal/template.html', overlayScope);
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerMonthGrid', ["moment", "$animate", function (moment, $animate) {
+  return {
+    restrict: 'E',
+
+    require: 'ngModel',
+
+    templateUrl: '/src/unicornNgDatepicker/directives/monthGrid/template.html',
+
+    scope: {
+      month: '=',
+      options: '='
+    },
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+
+      $animate.enabled(element, false);
+
+      var dayLengthMs = 1000 * 60 * 60 * 24;
+
+      var chunks = function chunks(array, size) {
+        var results = [];
+        while (array.length) {
+          results.push(array.splice(0, size));
+        }
+        return results;
+      };
+
+      var uniq = R.uniqWith(function (a, b) {
+        return a === b;
+      });
+
+      function isSelected(date) {
+
+        if (!date || !ngModelCtrl.$modelValue) {
+          return;
+        }
+
+        var dates = R.map(function (date) {
+          return +moment(date).startOf('day');
+        }, ngModelCtrl.$modelValue).sort();
+
+        var min = dates[0];
+        var max = R.last(dates);
+
+        var dateTs = +date;
+        return min <= dateTs && dateTs <= max;
+      }
+
+      function isDisabled(date, todayMs, disableBeforeMs, disableAfterMs) {
+
+        if (!date) {
+          return true;
+        }
+
+        var result = false;
+        todayMs = todayMs || +new Date();
+
+        if (disableBeforeMs > 0) {
+          if (+date < +disableBeforeMs) {
+            result = true;
+          }
+        } else if (disableBeforeMs !== 0) {
+          if (+date < +todayMs) {
+            result = true;
+          }
+        }
+        if (!result && disableAfterMs > 0) {
+          if (+disableAfterMs < +date) {
+            result = true;
+          }
+        }
+        return result;
+      }
+
+      function setWeekDays() {
+        scope.weekDays = R.times(function (num) {
+          return (num + scope.options.firstDay) % 7;
+        }, 7);
+      }
+
+      function setDays() {
+
+        if (!scope.weekDays) {
+          setWeekDays();
+        }
+
+        var date = moment(scope.month).startOf('month');
+        var prevMonthDays = R.times(R.identity, R.indexOf(date.day(), scope.weekDays));
+        var todayMs = +moment().startOf('day');
+        var disableBeforeMs = scope.options.disableBefore > 0 ? +moment(scope.options.disableBefore).startOf('day') : scope.options.disableBefore === 0 ? 1 : todayMs;
+        var disableAfterMs = scope.options.disableAfter > 0 ? +moment(scope.options.disableAfter).startOf('day') : null;
+
+        var days = R.map(function (day) {
+          var dayDate = moment(date).set('date', day + 1);
+          return {
+            day: day + 1,
+            date: dayDate,
+            isSelected: isSelected(dayDate),
+            isDisabled: isDisabled(dayDate, todayMs, disableBeforeMs, disableAfterMs),
+            isToday: +dayDate == todayMs,
+            isDisabledBefore: disableBeforeMs ? disableBeforeMs == dayDate : false,
+            isDisabledAfter: disableAfterMs ? disableAfterMs == dayDate : false
+          };
+        }, R.times(R.identity, date.daysInMonth()));
+        days = prevMonthDays.concat(days);
+        scope.weeks = chunks(days, 7);
+      }
+
+      scope.selectDate = function (date) {
+        date = moment(date);
+        var selected = ngModelCtrl.$modelValue || [];
+        if (!scope.options.isRange) {
+          selected = [+date];
+        } else {
+          if (1 < selected.length) {
+            selected = [+date];
+          } else {
+            selected.push(+date);
+            selected = selected.sort();
+            selected = [selected[0], R.last(selected)];
+          }
+        }
+        ngModelCtrl.$setViewValue(uniq(selected));
+        setDays();
+      };
+
+      scope.$watch('month', function (month, oldMonth) {
+        if (month === oldMonth) {
+          return;
+        }
+        setDays();
+      });
+
+      scope.$watch('options.firstDay', setDays);
+
+      ngModelCtrl.$render = function () {
+        setDays();
+      };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerInputFormat', ["moment", function (moment) {
+  var formatDate = R.curry(function (format, value) {
+    return moment(value).format(format);
+  });
+
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+      var formatter = formatDate(attrs.datepickerInputFormat);
+
+      ngModelCtrl.$formatters.push(function (value) {
+        value = R.filter(R.compose(R.not, R.isNil), [].concat(value));
+
+        if (!value || value.length === 0) {
+          return '';
+        }
+
+        if (R.is(Array, value)) {
+          value = R.map(formatter, value);
+          return value.join('—');
+        } else {
+          return formatter(value);
+        }
+      });
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerGridControls', ["moment", function (moment) {
+  return {
+    restrict: 'E',
+
+    require: 'ngModel',
+
+    templateUrl: '/src/unicornNgDatepicker/directives/gridControls/template.html',
+
+    scope: {
+      options: '='
+    },
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+
+      scope.months = R.times(R.identity, 12);
+
+      function getCurrentDate() {
+        return moment(scope.selectedMonth || +new Date());
+      }
+
+      function getCurrentMonth() {
+        return getCurrentDate().startOf('month');
+      }
+
+      function options(key) {
+        return scope.options || {};
+      }
+
+      scope.isMin = function () {
+        if (options().min) {
+          return +getCurrentMonth() === moment(options().min).startOf('month');
+        } else {
+          return false;
+        }
+      };
+
+      scope.isMax = function () {
+        if (options().max) {
+          return +getCurrentMonth() === moment(options().max).startOf('month');
+        } else {
+          return false;
+        }
+      };
+
+      scope.shift = function (count) {
+        var date = getCurrentDate();
+        date.add(count, 'months');
+
+        if (options().max) {
+          date = R.min(options().max, +date);
+        }
+
+        if (options().min) {
+          date = R.max(options().min, +date);
+        }
+
+        scope.selectedMonth = date;
+      };
+
+      scope.$watch('selectedMonth', function (value, oldValue) {
+        if (oldValue == value) {
+          return;
+        }
+        ngModelCtrl.$setViewValue(value);
+      });
+
+      ngModelCtrl.$render = function () {
+        scope.selectedMonth = ngModelCtrl.$modelValue || +new Date();
+      };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerGrid', ["moment", function (moment) {
+  return {
+    restrict: 'E',
+
+    templateUrl: '/src/unicornNgDatepicker/directives/grid/template.html',
+
+    require: 'ngModel',
+
+    scope: {
+      options: '='
+    },
+
+    link: function link(scope, element, atts, ngModelCtrl) {
+      var dayLengthMs = 1000 * 60 * 60 * 24;
+
+      scope.$watch('dates', function (dates) {
+        if (!dates) {
+          return;
+        }
+        ngModelCtrl.$setViewValue(dates);
+      });
+
+      ngModelCtrl.$render = function () {
+        if (ngModelCtrl.$modelValue && 0 < ngModelCtrl.$modelValue.length) {
+          scope.month = R.last([].concat(ngModelCtrl.$modelValue).sort());
+        } else {
+          scope.month = +new Date() + dayLengthMs;
+        }
+        scope.dates = ngModelCtrl.$modelValue;
+      };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepicker', ["datepickerModal", function (datepickerModal) {
+  return {
+    restrict: 'E',
+
+    templateUrl: '/src/unicornNgDatepicker/directives/datepicker/template.html',
+
+    require: 'ngModel',
+
+    scope: {
+      disableBefore: '=',
+      disableAfter: '='
+    },
+
+    link: function link(scope, element, attrs, ngModelCtrl) {
+
+      var options = {
+        isRange: false,
+        firstDay: 1 // locale.selected === 'ru-ru' ? 1 : 0
+      };
+
+      var datepickerModalEnt = null;
+
+      ngModelCtrl.$render = function () {
+        scope.date = R.filter(R.compose(R.not, R.isNil), [].concat(ngModelCtrl.$modelValue));
+      };
+
+      scope.$watch('disableBefore', function (value) {
+        options.disableBefore = value > 0 || value === 0 ? value : null;
+      });
+
+      scope.$watch('disableAfter', function (value) {
+        options.disableAfter = value > 0 || value === 0 ? value : null;
+      });
+
+      scope.$watch('date', function (date) {
+        if (!date || !date.length) {
+          return;
+        }
+        if (options.isRange) {
+          ngModelCtrl.$setViewValue([].concat(date));
+        } else {
+          ngModelCtrl.$setViewValue(date[0]);
+        }
+      });
+
+      scope.openDatepicker = function () {
+        if (datepickerModalEnt !== null) {
+          return datepickerModalEnt;
+        }
+
+        datepickerModalEnt = datepickerModal(scope.date, options).promise.then(function (date) {
+          if (date) {
+            scope.date = date;
+          }
+        }).finally(function () {
+          datepickerModalEnt = null;
+        });
+      };
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgDatepicker').directive('datepickerDateFormat', ["moment", function (moment) {
+  return {
+    restrict: 'E',
+    templateUrl: '/src/unicornNgDatepicker/directives/dateFormat/template.html',
+    scope: {
+      value: '=',
+      parse: '@',
+      format: '@'
+    },
+    link: function link(scope, element, attrs) {
+      var setUpValue;
+      setUpValue = function () {
+        if (scope.value === void 0) {
+          return;
+        }
+        return scope.formattedValue = moment(scope.value, scope.parse).format(scope.format);
+      };
+      scope.$watch('value', setUpValue);
+      return setUpValue();
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgModal').factory('windowPopup', ["$window", function ($window) {
+  var windowPopupDefaultParams;
+  windowPopupDefaultParams = {
+    width: 600,
+    height: 500,
+    personalbar: 0,
+    toolbar: 0,
+    scrollbars: 1,
+    resizable: 1
+  };
+  return function (url) {
+    var params, win, windowParams;
+    params = windowPopupDefaultParams;
+    windowParams = angular.extend(windowPopupDefaultParams, {
+      left: Math.round(screen.width / 2 - params.width / 2),
+      top: screen.height > params.height ? Math.round(screen.height / 3 - params.height / 2) : void 0
+    });
+    win = $window.open(url, R.join(',', R.map(R.join('='), R.toPairs(windowParams))));
+    if (win) {
+      return win.focus();
+    }
+  };
+}]);;
+'use strict';
+
+angular.module('unicornNgModal').factory('modal', ["$rootScope", "$q", "$compile", "$document", "$templateCache", "$timeout", function ($rootScope, $q, $compile, $document, $templateCache, $timeout) {
+  var Modal, modalWrapTemplate, openModals;
+  var id = 0;
+  openModals = {};
+  modalWrapTemplate = '/src/unicornNgModal/directives/modal/modalWrap.html';
+  Modal = (function () {
+    Modal.animationDuration = 500;
+
+    function Modal(layoutTemplateUrl, scope, options1) {
+      this.layoutTemplateUrl = layoutTemplateUrl;
+      this.options = options1;
+      this.scope = scope || $rootScope;
+      this.deferred = $q.defer();
+      this.promise = this.deferred.promise;
+      this.id = 'modal_' + ++id;
+      this.scope.$on('$destroy', (function (_this) {
+        return function () {
+          if (openModals[_this.id]) {
+            return _this.close();
+          }
+        };
+      })(this));
+      this;
+    }
+
+    Modal.prototype.isOpen = function () {
+      return openModals[this.id] !== void 0;
+    };
+
+    Modal.prototype.close = function (result) {
+      if (!this.isOpen()) {
+        return;
+      }
+      this.layout.addClass('modal_closing');
+      $timeout((function (_this) {
+        return function () {
+          openModals[_this.id] = void 0;
+          if (_this.layout) {
+            _this.layout.remove();
+            _this.layout = void 0;
+          }
+          _this.modalScope.$destroy();
+          _this.modalScope = void 0;
+          if (R.filter(R.identity, R.values(openModals)).length === 0) {
+            return $document.find('body').removeClass('modal-open');
+          }
+        };
+      })(this), Modal.animationDuration);
+      return this.deferred.resolve(result);
+    };
+
+    Modal.prototype.show = function () {
+      var layout, layoutWrap, modal, modalScope;
+      if (this.isOpen()) {
+        close();
+      }
+      modal = this;
+      modalScope = this.scope.$new();
+      this.modalScope = modalScope;
+      this.modalScope.$on('$destroy', function () {
+        if (modal.isOpen()) {
+          return modal.close();
+        }
+      });
+      modalScope.modal = {
+        id: this.id,
+        options: this.options,
+        close: function close() {
+          return modal.close.apply(modal, arguments);
+        },
+        promise: this.promise
+      };
+      layoutWrap = angular.element($templateCache.get(modalWrapTemplate));
+      layout = $templateCache.get(this.layoutTemplateUrl);
+      if (layoutWrap.length === 0) {
+        throw new Error("Can't find template " + modalWrapTemplate);
+      } else if (!layout) {
+        throw new Error("Can't find template " + this.layoutTemplateUrl);
+      }
+      layoutWrap.find('section').append(layout);
+      $document.find('body').append(layoutWrap);
+      $compile(layoutWrap)(modalScope);
+      this.layout = layoutWrap;
+      openModals[this.id] = this;
+      $timeout((function (_this) {
+        return function () {
+          if (!$document.find('body').hasClass('modal-open')) {
+            return $document.find('body').addClass('modal-open');
+          }
+        };
+      })(this), Modal.animationDuration);
+      return this.promise;
+    };
+
+    return Modal;
+  })();
+  return function (templateUrl, scope, options) {
+    var modal;
+    modal = new Modal(templateUrl, scope, options);
+    modal.show();
+    return modal;
+  };
+}]);;
+angular.module("componentsTemplates", []).run(["$templateCache", function($templateCache) {$templateCache.put("/src/unicornNgDatepicker/directives/dateFormat/template.html","<span ng-bind=\"formattedValue\"></span>");
+$templateCache.put("/src/unicornNgDatepicker/directives/datepicker/template.html","<section><div ng-click=\"openDatepicker()\" class=\"clicker\"></div><input type=\"text\" title=\"{{ hoverText }}\" datepicker-input-format=\"LL\" readonly=\"true\" placeholder=\"Choose date\" ng-model=\"date\" class=\"input\"/><div class=\"icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z\"></path></svg></div></section>");
+$templateCache.put("/src/unicornNgDatepicker/directives/grid/template.html","<div class=\"grids\"><datepicker-grid-controls ng-model=\"month\"></datepicker-grid-controls><datepicker-month-grid ng-model=\"dates\" month=\"month\" options=\"options\"></datepicker-month-grid></div>");
+$templateCache.put("/src/unicornNgDatepicker/directives/gridControls/template.html","<button ng-click=\"shift(-1)\" class=\"grid-controls-arrows\"><div class=\"icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z\"></path></svg></div></button><span class=\"grid-controls-month\"><datepicker-date-format value=\"selectedMonth\" format=\"MMM, YYYY\"></datepicker-date-format></span><button ng-click=\"shift(1)\" class=\"grid-controls-arrows\"><div class=\"icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z\"></path></svg></div></button>");
+$templateCache.put("/src/unicornNgDatepicker/directives/monthGrid/template.html","<div class=\"month-row\"><div ng-repeat=\"weekDay in weekDays\" class=\"month-col day-of-week\">   <datepicker-date-format value=\"weekDay\" parse=\"E\" format=\"dd\"></datepicker-date-format></div></div><section>   <div ng-repeat=\"week in weeks\" class=\"month-row\"><div ng-repeat=\"day in week\" class=\"month-col\"><button ng-disabled=\"{{ day.isDisabled }}\" ng-class=\"{ empty: !day.day, selected: day.isSelected, today: day.isToday, \'disabled-after\': day.isDisabledAfter, \'disabled-before\': day.isDisabledBefore}\" ng-click=\"day.date &amp;&amp; selectDate(day.date)\" class=\"day-of-month\"><span ng-if=\"day.day\" class=\"day-text\">{{ day.day }}</span><span class=\"day-today\"></span><span class=\"day-disabled-before\"></span><span class=\"day-disabled-after\"></span></button></div></div></section>");
+$templateCache.put("/src/unicornNgDatepicker/services/datepickerModal/template.html","<modal name=\"datepicker.modal\" class=\"modal-datapicker\"> <datepicker-grid ng-model=\"model\" options=\"options\" ng-change=\"modal.close(model)\"></datepicker-grid></modal>");
+$templateCache.put("/src/unicornNgModal/directives/close/template.html","<span ng-click=\"close()\" title=\"close\"><div class=\"icon\"><svg viewBox=\"0 0 24 24\"><path d=\"M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z\"></path></svg></div></span>");
+$templateCache.put("/src/unicornNgModal/directives/modal/modalWrap.html","<div id=\"{{ modal.id }}\" class=\"modal\"><div ng-click=\"modal.close()\" class=\"modal_overlay\"></div><section class=\"modal_content\"></section></div>");
+$templateCache.put("/src/unicornNgModal/directives/modal/template.html","<div><modal-close close=\"modal.close()\" ng-if=\"modal.options.isShowClose != false\"></modal-close><section></section></div>");}]);
